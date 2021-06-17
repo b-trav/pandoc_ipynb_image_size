@@ -2,7 +2,7 @@
 
 I am attempting to use `pandoc` to convert a Jupyter Notebook into a readable pdf.
 I have read the [pandoc manual](https://pandoc.org/MANUAL.html#images) section regarding images.
-Unfortunately the `ipynb` to `pdf` does not appear to be working as expected.
+~~Unfortunately the `ipynb` to `pdf` does not appear to be working as expected.~~
 
 ```bash
 pandoc --version
@@ -20,11 +20,15 @@ Here is an image, where I would like to specify the width
 
 ![Image Caption](test_image.png){ width=1cm }
 
+```markdown
+![Image Caption](test_image.png){ width=1cm }
+```
+
 Running:
 
 ```bash
 pandoc -s -o README.tex README.md
-pdflatex README.tex
+xelatex README.tex
 ```
 
 gives:
@@ -37,15 +41,21 @@ gives:
 \end{figure}
 ```
 
-However, if I put exactly this text in a markdown cell in a notebook, and run
+And, if I put 
+
+```markdown
+![Image Caption](test_image.png){ width=1cm }
+```
+
+in a markdown cell in a notebook, and run
 
 ```bash
-pandoc --from ipynb -s -o Pandoc_problems.tex Pandoc_problems.ipynb
-pdflatex Pandoc_problems.tex
+pandoc --from ipynb+link_attributes -s -o Pandoc_problems.tex Pandoc_problems.ipynb
+xelatex Pandoc_problems.tex
 ```
 
 I get:
 
 ```latex
-\includegraphics{test_image.png}\{ width=1cm \}
+\includegraphics[width=1cm,height=\textheight]{test_image.png}
 ```
